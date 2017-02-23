@@ -1,4 +1,4 @@
-My personal notes of ES6
+My personal notes of ES6, involving self explanatory examples and notes.
 
 Examples are from the book **You Don't Know JS: ES6 & Beyond** (By Kyle Simpson)
 
