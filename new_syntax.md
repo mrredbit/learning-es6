@@ -22,8 +22,8 @@ funcs[3](); // 3
     const a = 2;
     console.log(a);
     a = 3;
-// 2
-// TypeError!
+	// 2
+	// TypeError!
 }
 ```
 ```
