@@ -258,3 +258,79 @@ A bit longer but work
     };
 }
 ```
+### Object Literal Extensions
+#### Concise Properties
+Old way
+```
+var x = 2, y = 3,
+    o = {
+        x: x,
+        y: y
+    };
+```
+New way
+```
+var x = 2, y = 3, 
+	o = {
+    	x,
+    	y
+	};
+```
+#### Concise Methods
+Old way
+```
+var o = {
+    x: function () {
+        // ..
+    },
+    y: function () {
+        // ..
+    }
+}
+```
+New way
+*While x() { .. } seems to just be shorthand for x: function() { .. }, concise methods have special behaviors that their older counterparts don’t; specifically, the allowance for super (see “Object super" later in this chapter).
+```
+var o = {
+    x() {
+        // ..
+    }, 
+    y() {
+        // ..
+    }
+}
+```
+
+Concise method always create anonymous function, see below example
+```
+runSomething({
+    something(x, y) {
+        if (x > y) {
+            return something(y, x);
+        }
+        return y - x;
+    }
+});
+```
+`return something` will break as `something` is an anonymous function, it will not find a `something` identifier, so we’ll get a ReferenceError
+```
+runSomething({
+    something: function (x, y) {
+        if (x > y) {
+            return something(y, x);
+        }
+        return y - x;
+    }
+});
+```
+Code will only run like below, with function name defined as `something`
+```
+runSomething({
+    something: function something (x, y) {
+        if (x > y) {
+            return something(y, x);
+        }
+        return y - x;
+    }
+});
+```
