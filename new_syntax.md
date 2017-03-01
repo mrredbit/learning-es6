@@ -334,6 +334,67 @@ runSomething({
     }
 });
 ```
+### Getter / Setter (ES5 feature actually)
+```
+var o = {
+    __id: 10,
+    get id() {
+        return this.__id++;
+    },
+    set id(v) {
+        this.__id = v;
+    }
+}
+o.id; // 10
+o.id; // 11
+o.id = 20;
+o.id; // 20
+
+o.__id; // 21
+o.__id; // 21 -- still!
+```
+
+### Computed Property Names
+Old way
+```
+var prefix = "user_";
+
+var o = {
+    baz: function(..) { .. }
+};
+o[ prefix + "foo" ] = function(..) { .. };
+o[ prefix + "bar" ] = function(..) { .. };
+```
+New way
+```
+var prefix = "user_";
+var o = {
+    baz: function(..) { .. },
+    [ prefix + "foo" ]: function(..) { .. }, 
+    [ prefix + "bar" ]: function(..) { .. } 
+    ..
+};
+```
+### Setting [[Prototype]]
+```
+var o1 = {
+    // ..
+};
+var o2 = {
+    __proto__: o1,
+    // ..
+};
+```
+**Cannot be used as `o.__proto__`**
+
+Utility function `Object.setPrototypeOf(..)`
+```
+var o1 = {
+    // ..
+};
+var o2 = {
+    // ..
+};
 Object.setPrototypeOf(o2, o1);
 ```
 ### Object super
@@ -351,4 +412,59 @@ var o2 = {
 };
 Object.setPrototypeOf(o2, o1);
 o2.foo(); // o1:foo // o2:foo
+```
+### Template Literals (or Interpolated String Literals)
+```
+var name = "Kyle";
+var greeting = `Hello ${name}!`;
+console.log(greeting); // "Hello Kyle!"
+console.log(typeof greeting); // "string"
+```
+allow multiple line
+```
+var text =
+    `Now is the time for all good men 
+    to come to the aid of their 
+    country!`;
+console.log(text);
+// Now is the time for all good men
+// to come to the aid of their
+// country!
+```
+#### Tagged Template Literals (or Tagged String Literals)
+```
+function foo(strings, ...values) {
+    console.log(strings);
+    console.log(values);
+}
+var desc = "awesome";
+foo`Everything is ${desc}!`; 
+// [ "Everything is ", "!"] 
+// [ "awesome" ]
+```
+```
+function dollabillsyall(strings, ...values) {
+    return strings.reduce(function (s, v, idx) {
+        if (idx > 0) {
+            if (typeof values[idx - 1] == "number") {
+                // look, also using interpolated
+                // string literals!
+                s += `$${values[idx - 1].toFixed(2)}`;
+            } else {
+                s += values[idx - 1];
+            }
+        }
+        return s + v;
+    }, "");
+}
+var amt1 = 11.99,
+    amt2 = amt1 * 1.08, name = "Kyle";
+var text = dollabillsyall
+    `Thanks for your purchase, ${name}! Your 
+    product cost was ${amt1}, which with tax 
+    comes out to ${amt2}.`
+console.log(text);
+// Thanks for your purchase, Kyle! Your
+// product cost was $11.99, which with tax
+// comes out to $12.95.
 ```
